@@ -1,10 +1,11 @@
-#ifndef INC_0B_CSVPARSER_H
-#define INC_0B_CSVPARSER_H
+#ifndef CSVPARSER_H
+#define CSVPARSER_H
 
 #include <fstream>
 #include <typeinfo>
 #include <regex>
 #include "Tuple.h"
+//#include "Convert.h"
 
 using namespace std;
 
@@ -19,8 +20,7 @@ private:
     char lineDelimiter = '\n';
 
 
-    template<typename _CharT, typename _Traits, typename _Alloc>
-    void getLine(basic_istream<_CharT, _Traits>& is, basic_string<_CharT, _Traits, _Alloc>& str)
+    void getLine(ifstream& is, string& str)
     {
         str.clear();
 
@@ -31,33 +31,6 @@ private:
                 break;
             str.push_back(c);
         }
-    }
-
-    bool emptyTailToDelimiter(string a, int pos)
-    {
-        for (int i = pos; i < a.size(); ++i)
-            if (a[i] == columnDelimiter)
-                break;
-            else
-                if (a[i] != ' ')
-                    return false;
-
-        return true;
-    }
-
-    string ltrim(const string& str)
-    {
-        return regex_replace(str, regex("^\\s+"), string(""));
-    }
-
-    string rtrim(const string& str)
-    {
-        return regex_replace(str, regex("\\s+$"), string(""));
-    }
-
-    string trim(const string& str)
-    {
-        return ltrim(rtrim(str));
     }
 
     void reset()
@@ -176,12 +149,10 @@ public:
         size_t fcounter = 0;
         size_t linePos = 0;
         bool accessWriteDelim = false;
-        //line = trim(line);
         for (char c : line)
         {
                 if (c == columnDelimiter)
                 {
-                    //fields[fcounter] = trim(fields[fcounter]);
                     fields.emplace_back("");
                     fcounter++;
                 }
@@ -221,4 +192,4 @@ public:
     }
 };
 
-#endif
+#endif  //CSVPARSER_H
