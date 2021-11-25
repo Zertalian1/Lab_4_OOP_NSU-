@@ -5,7 +5,6 @@
 #include <typeinfo>
 #include <regex>
 #include "Tuple.h"
-//#include "Convert.h"
 
 using namespace std;
 
@@ -123,9 +122,6 @@ public:
         if (offset < 0)
             throw logic_error("Bad file offset! offset < 0");
     }
-
-
-    
 
 
     CSVIterator begin()

@@ -6,9 +6,9 @@ int main(int argc, char* argv[])
 {
     ifstream a("input.txt");
 
-    CSVParser<int, int> parser(a, 0/*skip first lines count*/);
+    CSVParser<int, string> parser(a, 0/*skip first lines count*/);
 
-    for (tuple<int, int> el : parser) 
+    for (tuple<int, string> el : parser)
    // tuple<string, double, int> el("asd", 1.3, 5);
     //tuple<> el;
     //tuple<string> el("asd");

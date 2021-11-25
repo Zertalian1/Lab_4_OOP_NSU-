@@ -140,11 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CSVParser.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Convert.h" />
     <ClInclude Include="CSVParser.h" />
     <ClInclude Include="Tuple.h" />
   </ItemGroup>

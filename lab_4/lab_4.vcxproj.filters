@@ -18,18 +18,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="CSVParser.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tuple.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="CSVParser.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Convert.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
