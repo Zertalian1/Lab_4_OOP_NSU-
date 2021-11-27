@@ -1,9 +1,8 @@
+#pragma once
 #ifndef CSVPARSER_H
 #define CSVPARSER_H
 
 #include <fstream>
-#include <typeinfo>
-#include <regex>
 #include "Tuple.h"
 
 using namespace std;
@@ -15,22 +14,8 @@ private:
     ifstream& input;
     size_t offset;
     int fileLength = -1;
-    char columnDelimiter = ',';
-    char lineDelimiter = '\n';
+    char columnDel = ',';
 
-
-    void getLine(ifstream& is, string& str)
-    {
-        str.clear();
-
-        char c;
-        while (is.get(c))
-        {
-            if (c == lineDelimiter)
-                break;
-            str.push_back(c);
-        }
-    }
 
     void reset()
     {
@@ -55,6 +40,7 @@ private:
     }
 
     class CSVIterator  // file string // начледование не прокатит
+    /*probably it would be possible to throw everything off here, but it seems to me that it would look illogical*/
     {
     private:
         string strBuffer;
@@ -68,11 +54,9 @@ private:
     public:
         CSVIterator(ifstream& ifs, size_t index, CSVParser<Args...>& parent) : index(index), parent(parent), input(ifs)
         {
-            for (int i = 0; i < index - 1; i++, parent.getLine(input, strBuffer));
+            for (int i = 0; i < index - 1; i++, getline(input, strBuffer));
 
-            parent.getLine(input, strBuffer);
-            //if (!input )   // позволило упростить end, но стоит ли
-            //    throw logic_error("Bad file!");
+            getline(input, strBuffer);
         }
 
         CSVIterator operator++()
@@ -83,9 +67,9 @@ private:
                 input.clear();
                 input.seekg(0, ios::beg);
                 
-                for (int i = 0; i < index - 1; ++i, parent.getLine(input, strBuffer)); // ignore first elements
+                for (int i = 0; i < index - 1; ++i, getline(input, strBuffer)); // ignore first elements
 
-                parent.getLine(input, strBuffer);
+                getline(input, strBuffer);
             }
             else
             {
@@ -115,12 +99,18 @@ private:
 public:
     explicit CSVParser(ifstream& ifs, size_t offset) : input(ifs), offset(offset)
     {
-        if (!ifs.is_open())
-            throw std::invalid_argument("Can't open file");
-        if (offset >= getLength())
-            throw logic_error("Bad file offset! offset >= file");
-        if (offset < 0)
-            throw logic_error("Bad file offset! offset < 0");
+        if (!ifs.is_open()) {
+            cerr << "Error: Can't open file";
+            throw std::invalid_argument("");
+        }
+        if (offset >= getLength()) {
+            cerr << "Error: offset >= file";
+            throw logic_error("");
+        }
+        if (offset < 0) {
+            cerr << "Error: offset < 0";
+            throw logic_error("");
+        }
     }
 
 
@@ -139,15 +129,13 @@ public:
         return a;
     }
 
-    vector<string> read_string(string& line, int lineNum)
+    vector<string> read_string(string& line)
     {
         vector<string> fields{ "" };
         size_t fcounter = 0;
-        size_t linePos = 0;
-        bool accessWriteDelim = false;
         for (char c : line)
         {
-                if (c == columnDelimiter)
+                if (c == columnDel)
                 {
                     fields.emplace_back("");
                     fcounter++;
@@ -156,7 +144,6 @@ public:
                 {
                     fields[fcounter].push_back(c);
                 }
-            linePos++;
         }
         return fields;
     }
@@ -168,16 +155,16 @@ public:
             throw invalid_argument("Line " + to_string(number) + " is empty!");
 
         tuple<Args...> table_str;
-        vector<string> fields = read_string(line, number);
+        vector<string> fields = read_string(line);   //split into columns
 
         if (fields.size() != size)
             throw invalid_argument("Wrong number of fields in line " + to_string(number) + "!");
 
-        // у нас почти есть tuple, теперь нужно преобразовать в нужный тип дпнных
+        
         auto a = fields.begin();
         try
         {
-            parser_utils::parse(table_str, a);
+            parser_util::parse(table_str, a);   // data type conversion
         }
         catch (exception& e)
         {

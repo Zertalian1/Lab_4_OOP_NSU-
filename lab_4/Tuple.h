@@ -37,14 +37,14 @@ struct callback
 };
 
 template<typename _CharT, typename _Traits, typename... Args>
-inline std::basic_ostream<_CharT, _Traits>& operator<<(std::basic_ostream<_CharT, _Traits>& stream, std::tuple<Args...>& t)
+std::basic_ostream<_CharT, _Traits>&  operator<<(std::basic_ostream<_CharT, _Traits>& stream, std::tuple<Args...>& t)
 {
     forEach(t, callback(), stream);
-
+ 
     return stream;
 }
 
-namespace parser_utils
+namespace parser_util
 {
 /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                // *PARSE* //
@@ -106,7 +106,7 @@ template <class _Type>
         void operator()(T& t, std::vector<std::string>::iterator& it)
         {
             t = lexical_cast<T>(*it);
-            ++it;
+            it++;
         }
     };
 
