@@ -7,7 +7,7 @@
 
 using namespace std;
 
-template<class ... Args>
+template<class ... Args> // если лежит не здесь то что-то ломается)
 class CSVParser         // information about file
 {
 private:
