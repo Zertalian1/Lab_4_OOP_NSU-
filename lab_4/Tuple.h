@@ -1,4 +1,7 @@
 #pragma once
+#ifndef TUPLE_H
+#define TUPLE_H
+
 #include <tuple>
 #include <functional>
 #include <iostream>
@@ -49,11 +52,11 @@ namespace parser_util
 /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                // *PARSE* //
 template <class _Type>
-    class lexical_cast
+    class cast
     {
         _Type value;
     public:
-        lexical_cast(const std::string& src)
+        cast(const std::string& src)
         {
             std::stringstream s;
             s.str(src);
@@ -105,7 +108,7 @@ template <class _Type>
         template<typename T>
         void operator()(T& t, std::vector<std::string>::iterator& it)
         {
-            t = lexical_cast<T>(*it);
+            t = cast<T>(*it);
             it++;
         }
     };
@@ -116,3 +119,4 @@ template <class _Type>
         forEach(tuple, callback(), it);
     }
 }
+#endif  //TUPLE_H

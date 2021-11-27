@@ -46,8 +46,8 @@ private:
         string strBuffer;
         ifstream& input;
         size_t index;
-        CSVParser<Args...>& parent;
-        bool last = false;
+        CSVParser<Args...>& parent; // previous comment
+        bool last = false;  //there may be the same line in the middle of the text and at the end
 
         friend class CSVParser;
 

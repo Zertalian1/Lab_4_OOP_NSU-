@@ -2,8 +2,9 @@
 //#include "Tuple.h"
 using namespace std;
 
-int main(int argc, char* argv[])
+int main()
 {
+    setlocale(LC_ALL, "Russian");
     ifstream a("input.txt");
 
     CSVParser<int, string> parser(a, 0/*skip first lines count*/);
