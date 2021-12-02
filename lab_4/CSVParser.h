@@ -7,7 +7,7 @@
 
 using namespace std;
 
-template<class ... Args> // если лежит не здесь то что-то ломается)
+template<class ... Args> 
 class CSVParser         // information about file
 {
 private:
@@ -27,19 +27,19 @@ private:
     {
         if (fileLength == -1)
         {
-            
+
             reset();
 
             string line;
             for (fileLength = 0; getline(input, line); fileLength++);
 
-           
+
             reset();
         }
         return fileLength;
     }
 
-    class CSVIterator  // file string // начледование не прокатит
+    class CSVIterator  // file string 
     /*probably it would be possible to throw everything off here, but it seems to me that it would look illogical*/
     {
     private:
@@ -66,7 +66,7 @@ private:
                 index++;
                 input.clear();
                 input.seekg(0, ios::beg);
-                
+
                 for (int i = 0; i < index - 1; ++i, getline(input, strBuffer)); // ignore first elements
 
                 getline(input, strBuffer);
@@ -135,15 +135,15 @@ public:
         size_t fcounter = 0;
         for (char c : line)
         {
-                if (c == columnDel)
-                {
-                    fields.emplace_back("");
-                    fcounter++;
-                }
-                else
-                {
-                    fields[fcounter].push_back(c);
-                }
+            if (c == columnDel)
+            {
+                fields.emplace_back("");
+                fcounter++;
+            }
+            else
+            {
+                fields[fcounter].push_back(c);
+            }
         }
         return fields;
     }
@@ -160,19 +160,10 @@ public:
         if (fields.size() != size)
             throw invalid_argument("Wrong number of fields in line " + to_string(number) + "!");
 
-        
-        auto a = fields.begin();
-        try
-        {
-            parser_util::parse(table_str, a);   // data type conversion
-        }
-        catch (exception& e)
-        {
-            throw invalid_argument("Line " + to_string(number) + " contains bad types!");
-        }
 
+        auto a = fields.begin();
+        parser_util::parse(table_str, a);   // data type conversio
         return table_str;
     }
 };
-
 #endif  //CSVPARSER_H

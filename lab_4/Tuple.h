@@ -7,42 +7,34 @@
 #include <iostream>
 #include <sstream>
 
-template<const int index, typename Callback, typename... Args>
+template<const int index, typename... Args>
 struct iterate
 {
-    static void next(std::tuple<Args...>& t, Callback callback, std::ostream& stream)
+    static void next(std::tuple<Args...>& t, std::ostream& stream)
     {
-        iterate<index - 1, Callback, Args...>::next(t, callback, stream);
-        callback(std::get<index>(t), stream);
+        iterate<index - 1,  Args...>::next(t, stream);
+        stream << std::get<index>(t) << " ";
     }
 };
 
-template<typename Callback, typename... Args>
-struct iterate<-1, Callback, Args...>
+template<typename... Args>
+struct iterate<-1, Args...>
 {
-    static void next(std::tuple<Args...>& t, Callback callback, std::ostream& stream) {}
+    static void next(std::tuple<Args...>& t, std::ostream& stream) {}
 };
 
-template<typename Callback, typename... Args>
-void forEach(std::tuple<Args...>& t, Callback callback, std::ostream& stream)
+template<typename... Args>
+void forEach(std::tuple<Args...>& t, std::ostream& stream)
 {
     int const t_size = std::tuple_size<std::tuple<Args...>>::value;
-    iterate<t_size - 1, Callback, Args...>::next(t, callback, stream);
+    iterate<t_size - 1, Args...>::next(t, stream);
 }
 
-struct callback
-{
-    template<typename T>
-    void operator()(T&& t, std::ostream& stream)
-    {
-        stream << t << " ";
-    }
-};
 
 template<typename _CharT, typename _Traits, typename... Args>
 std::basic_ostream<_CharT, _Traits>&  operator<<(std::basic_ostream<_CharT, _Traits>& stream, std::tuple<Args...>& t)
 {
-    forEach(t, callback(), stream);
+    forEach(t, stream);
  
     return stream;
 }
